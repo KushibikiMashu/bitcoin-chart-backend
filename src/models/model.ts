@@ -4,8 +4,7 @@ const adapter = new FileSync('src/database/database.json')
 const db = low(adapter)
 
 const test = () => {
-    db.defaults({posts: [], user: {}, count: 0})
-        .write()
+  db.defaults({ posts: [], user: {}, count: 0 }).write()
 }
 
 export default test
