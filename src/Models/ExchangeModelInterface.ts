@@ -1,9 +1,8 @@
 import { BitcoinPrices } from "../Types/Types";
 
 export default interface ExchangeModelInterface {
-  // TODO プロパティを記述する
+  // TODO プロパティdb, tableを記述する
 
-  // getAll(): BitcoinPrices;
   init(): void;
   initialInsert(): void;
 }
