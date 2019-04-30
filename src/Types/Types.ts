@@ -19,7 +19,4 @@ export interface BuyPriceAndDatetime {
   datetime: string;
 }
 
-export interface BitcoinChartPlot {
-  price: number;
-  timestamp: number;
-}
+export type BitcoinChartPlot = number[];
