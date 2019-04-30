@@ -1,13 +1,13 @@
 import * as express from "express";
 
-import { set } from "../models/zaifModel";
+import ZaifModel from "../Models/ZaifModel";
 
 const router = express.Router();
 
-router.get("/chart", (req: express.Request, res: express.Response) => {
+router.get("/all", (req: express.Request, res: express.Response) => {
   // dbから値を取り出す
   // jsonにして返却する
-  set();
+  ZaifModel.set();
   res.send("/api/list");
 });
 

@@ -1,7 +1,7 @@
 import * as low from "lowdb";
 import * as FileSync from "lowdb/adapters/FileSync";
 
-interface ExchangeSchema {
+export interface ExchangeSchema {
   id: number;
   buyPrice: number;
   datetime: string;
