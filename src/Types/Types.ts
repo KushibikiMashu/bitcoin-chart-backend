@@ -1,4 +1,8 @@
-export interface ExchangeSchema {
+export interface DbSchema {
+  [key: string]: Bitcoin[];
+}
+
+export interface Bitcoin {
   id: number;
   buyPrice: number;
   datetime: string;

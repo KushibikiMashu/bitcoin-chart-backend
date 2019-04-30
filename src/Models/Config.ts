@@ -1,8 +1,9 @@
 import * as low from "lowdb";
 import * as FileSync from "lowdb/adapters/FileSync";
-import { ExchangeSchema } from "../Types/Types";
+import { DbSchema } from "../Types/Types";
 
-const adapter = new FileSync<ExchangeSchema>("database/db.json");
-const db = low(adapter);
-
-export default db;
+export const zaifDb = low(new FileSync<DbSchema>("database/zaif.json"));
+export const bitflyerDb = low(new FileSync<DbSchema>("database/bitflyer.json"));
+export const coincheckDb = low(
+  new FileSync<DbSchema>("database/coincheck.json")
+);
