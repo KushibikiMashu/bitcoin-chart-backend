@@ -2,7 +2,7 @@
 
 function createJson(string $filename){
     $data = [];
-    $fp   = fopen("{$filename}.csv", 'r');
+    $fp   = fopen("data/csv/{$filename}.csv", 'r');
     while (($csv = fgetcsv($fp)) !== false) {
         $data[] = [
             'id'       => (int)$csv[0],
@@ -12,7 +12,7 @@ function createJson(string $filename){
     }
     fclose($fp);
 
-    $json = fopen("{$filename}.json", 'w+b');
+    $json = fopen("data/json/{$filename}.json", 'w+b');
     fwrite($json, json_encode($data, JSON_UNESCAPED_UNICODE));
     fclose($json);
 }

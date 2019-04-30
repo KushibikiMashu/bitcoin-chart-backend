@@ -10,8 +10,7 @@ export interface DbSchema {
 
 export interface Bitcoin {
   id: number;
-  buyPrice: number;
-  datetime: string;
+  BuyPriceAndDatetime;
 }
 
 export interface BuyPriceAndDatetime {
