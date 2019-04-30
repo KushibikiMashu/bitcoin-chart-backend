@@ -1,7 +1,7 @@
 import { zaifDb } from "./Config";
 import { readFileSync } from "fs";
 import ExchangeModelInterface from "./ExchangeModelInterface";
-import { Exchange } from "../Types/Types";
+import { Exchange, BitcoinPrices } from "../Types/Types";
 
 export default class ZaifModel implements ExchangeModelInterface {
   private db;
@@ -23,5 +23,9 @@ export default class ZaifModel implements ExchangeModelInterface {
       readFileSync(`data/json/${Exchange.Zaif}.json`, "utf8")
     );
     this.db.set(Exchange.Zaif, json).write();
+  }
+
+  getAll(): BitcoinPrices {
+    return this.table.value();
   }
 }

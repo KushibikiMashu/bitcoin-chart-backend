@@ -1,7 +1,7 @@
 import { coincheckDb } from "./Config";
 import { readFileSync } from "fs";
 import ExchangeModelInterface from "./ExchangeModelInterface";
-import { Exchange } from "../Types/Types";
+import { BitcoinPrices, Exchange } from "../Types/Types";
 
 export default class CoincheckModel implements ExchangeModelInterface {
   private db;
@@ -23,5 +23,9 @@ export default class CoincheckModel implements ExchangeModelInterface {
       readFileSync(`data/json/${Exchange.Coincheck}.json`, "utf8")
     );
     this.db.set(Exchange.Coincheck, json).write();
+  }
+
+  getAll(): BitcoinPrices {
+    return this.table.value();
   }
 }

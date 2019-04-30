@@ -3,7 +3,7 @@ import * as express from "express";
 const router = express.Router();
 
 router.get("/all", (req: express.Request, res: express.Response) => {
-  // dbから値を取り出す
+  // DBから値を取り出すserviceを作る
   // jsonにして返却する
   res.send("/api/list");
 });

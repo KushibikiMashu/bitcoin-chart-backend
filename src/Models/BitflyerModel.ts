@@ -1,7 +1,7 @@
 import { bitflyerDb } from "./Config";
 import { readFileSync } from "fs";
 import ExchangeModelInterface from "./ExchangeModelInterface";
-import { Exchange } from "../Types/Types";
+import { BitcoinPrices, Exchange } from "../Types/Types";
 
 export default class BitflyerModel implements ExchangeModelInterface {
   private db;
@@ -23,5 +23,9 @@ export default class BitflyerModel implements ExchangeModelInterface {
       readFileSync(`data/json/${Exchange.Bitflyer}.json`, "utf8")
     );
     this.db.set(Exchange.Bitflyer, json).write();
+  }
+
+  getAll(): BitcoinPrices {
+    return this.table.value();
   }
 }
