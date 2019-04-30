@@ -1,5 +1,5 @@
 export interface DbSchema {
-  [key: string]: Bitcoin[];
+  [key: string]: Bitcoin[] | [];
 }
 
 export interface Bitcoin {

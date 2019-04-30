@@ -1,17 +1,23 @@
 import { zaifDb } from "./Config";
 import ExchangeModelInterface from "./ExchangeModelInterface";
-import { BitcoinPrices } from "../Types/Types";
+import { DbSchema, BitcoinPrices } from "../Types/Types";
+import { readFileSync } from "fs";
 
-export default class ZaifModel {
-  // db: =
+export default class ZaifModel implements ExchangeModelInterface {
+  private db;
+  private table;
 
-  constructor() {}
+  constructor() {
+    this.db = zaifDb;
+    this.init();
+    this.table = zaifDb.get("zaif");
+  }
 
-  static initialize() {
-    zaifDb.defaults({ zaif: [] }).write();
+  init(): void {
+    this.db.defaults({ zaif: [] }).write();
+  }
 
-    const table = zaifDb.get("zaif");
-
-    table.push({ id: 2, buyPrice: 3, datetime: "" }).write();
+  initialInsert(): void {
+    const json = JSON.parse(readFileSync("data/json/zaif.json", "utf8"));
   }
 }
