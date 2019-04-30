@@ -33,7 +33,7 @@ export default class ExchangeService {
   static getChartPlot(values: BuyPriceAndDatetime[]): BitcoinChartPlot[] {
     return values.map(v => ({
       price: v.buyPrice,
-      datetime: new Date(v.datetime).getTime()
+      timestamp: new Date(v.datetime).getTime()
     }));
   }
 }

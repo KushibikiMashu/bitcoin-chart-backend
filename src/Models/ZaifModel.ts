@@ -1,7 +1,7 @@
 import { zaifDb } from "./Config";
 import { readFileSync } from "fs";
 import ExchangeModelInterface from "./ExchangeModelInterface";
-import { Exchange, Bitcoin, BitcoinChartPlot } from "../Types/Types";
+import { Exchange, Bitcoin } from "../Types/Types";
 
 export default class ZaifModel implements ExchangeModelInterface {
   private db;

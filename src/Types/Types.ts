@@ -21,5 +21,5 @@ export interface BuyPriceAndDatetime {
 
 export interface BitcoinChartPlot {
   price: number;
-  datetime: number;
+  timestamp: number;
 }

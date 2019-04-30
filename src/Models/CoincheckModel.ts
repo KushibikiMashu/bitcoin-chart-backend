@@ -1,7 +1,7 @@
 import { coincheckDb } from "./Config";
 import { readFileSync } from "fs";
 import ExchangeModelInterface from "./ExchangeModelInterface";
-import { Bitcoin, BitcoinChartPlot, Exchange } from "../Types/Types";
+import { Bitcoin, Exchange } from "../Types/Types";
 
 export default class CoincheckModel implements ExchangeModelInterface {
   private db;
