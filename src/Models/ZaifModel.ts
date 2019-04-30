@@ -1,6 +1,7 @@
 import { zaifDb } from "./Config";
-import ExchangeModelInterface from "./ExchangeModelInterface";
 import { readFileSync } from "fs";
+import ExchangeModelInterface from "./ExchangeModelInterface";
+import { Exchange } from "../Types/Types";
 
 export default class ZaifModel implements ExchangeModelInterface {
   private db;
@@ -9,7 +10,7 @@ export default class ZaifModel implements ExchangeModelInterface {
   constructor() {
     this.db = zaifDb;
     this.init();
-    this.table = zaifDb.get("zaif");
+    this.table = zaifDb.get(Exchange.Zaif);
   }
 
   init(): void {
@@ -18,7 +19,9 @@ export default class ZaifModel implements ExchangeModelInterface {
 
   initialInsert(): void {
     if (this.table.value() !== null) return;
-    const json = JSON.parse(readFileSync("data/json/zaif.json", "utf8"));
-    this.db.set("zaif", json).write();
+    const json = JSON.parse(
+      readFileSync(`data/json/${Exchange.Zaif}.json`, "utf8")
+    );
+    this.db.set(Exchange.Zaif, json).write();
   }
 }

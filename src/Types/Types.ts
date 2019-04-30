@@ -1,3 +1,9 @@
+export enum Exchange {
+  Zaif = "zaif",
+  Bitflyer = "bitflyer",
+  Coincheck = "coincheck"
+}
+
 export interface DbSchema {
   [key: string]: Bitcoin[] | [];
 }
