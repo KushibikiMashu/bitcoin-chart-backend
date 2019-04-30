@@ -14,9 +14,12 @@ export interface Bitcoin {
   datetime: string;
 }
 
-export interface BitcoinPrice {
+export interface BuyPriceAndDatetime {
   buyPrice: number;
   datetime: string;
 }
 
-export type BitcoinPrices = BitcoinPrice[];
+export interface BitcoinChartPlot {
+  price: number;
+  datetime: number;
+}

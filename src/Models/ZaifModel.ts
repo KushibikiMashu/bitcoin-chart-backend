@@ -1,7 +1,7 @@
 import { zaifDb } from "./Config";
 import { readFileSync } from "fs";
 import ExchangeModelInterface from "./ExchangeModelInterface";
-import { Exchange, Bitcoin } from "../Types/Types";
+import { Exchange, Bitcoin, BitcoinChartPlot } from "../Types/Types";
 
 export default class ZaifModel implements ExchangeModelInterface {
   private db;
@@ -27,5 +27,13 @@ export default class ZaifModel implements ExchangeModelInterface {
 
   getAll(): Bitcoin[] {
     return this.table.value();
+  }
+
+  getChartPlots(): BitcoinChartPlot[] {
+    const value: Bitcoin[] = this.table.value();
+    return value.map(v => ({
+      price: v.buyPrice,
+      datetime: new Date(v.datetime).getTime()
+    }));
   }
 }

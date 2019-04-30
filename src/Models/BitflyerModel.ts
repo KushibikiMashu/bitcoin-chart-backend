@@ -1,7 +1,7 @@
 import { bitflyerDb } from "./Config";
 import { readFileSync } from "fs";
 import ExchangeModelInterface from "./ExchangeModelInterface";
-import { Bitcoin, Exchange } from "../Types/Types";
+import { Bitcoin, BitcoinChartPlot, Exchange } from "../Types/Types";
 
 export default class BitflyerModel implements ExchangeModelInterface {
   private db;
@@ -27,5 +27,13 @@ export default class BitflyerModel implements ExchangeModelInterface {
 
   getAll(): Bitcoin[] {
     return this.table.value();
+  }
+
+  getChartPlots(): BitcoinChartPlot[] {
+    const value: Bitcoin[] = this.table.value();
+    return value.map(v => ({
+      price: v.buyPrice,
+      datetime: new Date(v.datetime).getTime()
+    }));
   }
 }
