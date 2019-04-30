@@ -28,12 +28,4 @@ export default class CoincheckModel implements ExchangeModelInterface {
   getAll(): Bitcoin[] {
     return this.table.value();
   }
-
-  getChartPlots(): BitcoinChartPlot[] {
-    const value: Bitcoin[] = this.table.value();
-    return value.map(v => ({
-      price: v.buyPrice,
-      datetime: new Date(v.datetime).getTime()
-    }));
-  }
 }

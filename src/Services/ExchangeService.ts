@@ -1,7 +1,7 @@
 import ZaifModel from "../Models/ZaifModel";
 import BitflyerModel from "../Models/BitflyerModel";
 import CoincheckModel from "../Models/CoincheckModel";
-import { Bitcoin, BitcoinChartPlot } from "../Types/Types";
+import { Bitcoin, BuyPriceAndDatetime, BitcoinChartPlot } from "../Types/Types";
 
 export default class ExchangeService {
   private zaif;
@@ -24,9 +24,16 @@ export default class ExchangeService {
 
   getAllChartPlot(): { [key: string]: BitcoinChartPlot[] } {
     return {
-      zaif: this.zaif.getChartPlots(),
-      bitflyer: this.bitflyer.getChartPlots(),
-      coincheck: this.coincheck.getChartPlots()
+      zaif: ExchangeService.getChartPlot(this.zaif.getAll()),
+      bitflyer: ExchangeService.getChartPlot(this.bitflyer.getAll()),
+      coincheck: ExchangeService.getChartPlot(this.coincheck.getAll())
     };
+  }
+
+  static getChartPlot(values: BuyPriceAndDatetime[]): BitcoinChartPlot[] {
+    return values.map(v => ({
+      price: v.buyPrice,
+      datetime: new Date(v.datetime).getTime()
+    }));
   }
 }
