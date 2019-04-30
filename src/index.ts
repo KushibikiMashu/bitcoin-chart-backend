@@ -1,20 +1,12 @@
 import * as express from "express";
-import exchange from "./Controllers/ExchangeController";
-import ZaifModel from "./Models/ZaifModel";
-import BitflyerModel from "./Models/BitflyerModel";
-import CoincheckModel from "./Models/CoincheckModel";
+import exchange from "./Controllers/api/ExchangeController";
+import migration from "./Controllers/api/MigrationConrtoller";
 
 const app = express();
 const port = 3005;
 
 app.use("/api/exchange", exchange);
-
-app.get("/zaif", (req, res) => {
-  new ZaifModel().initialInsert();
-  new BitflyerModel().initialInsert();
-  new CoincheckModel().initialInsert();
-  res.send("ok");
-});
+app.use("/api/migration", migration);
 
 app.get("/", (req: express.Request, res: express.Response) =>
   res.sendStatus(404)

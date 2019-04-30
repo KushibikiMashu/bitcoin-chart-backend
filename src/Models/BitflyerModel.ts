@@ -17,7 +17,7 @@ export default class BitflyerModel implements ExchangeModelInterface {
     this.db.defaults({ bitflyer: null }).write();
   }
 
-  initialInsert(): void {
+  migrate(): void {
     if (this.table.value() !== null) return;
     const json = JSON.parse(
       readFileSync(`data/json/${Exchange.Bitflyer}.json`, "utf8")

@@ -17,7 +17,7 @@ export default class ZaifModel implements ExchangeModelInterface {
     this.db.defaults({ zaif: null }).write();
   }
 
-  initialInsert(): void {
+  migrate(): void {
     if (this.table.value() !== null) return;
     const json = JSON.parse(
       readFileSync(`data/json/${Exchange.Zaif}.json`, "utf8")

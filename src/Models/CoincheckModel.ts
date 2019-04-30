@@ -17,7 +17,7 @@ export default class CoincheckModel implements ExchangeModelInterface {
     this.db.defaults({ coincheck: null }).write();
   }
 
-  initialInsert(): void {
+  migrate(): void {
     if (this.table.value() !== null) return;
     const json = JSON.parse(
       readFileSync(`data/json/${Exchange.Coincheck}.json`, "utf8")
