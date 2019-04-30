@@ -14,10 +14,11 @@ export default class ZaifModel implements ExchangeModelInterface {
   }
 
   init(): void {
-    this.db.defaults({ zaif: [] }).write();
+    this.db.defaults({ zaif: null }).write();
   }
 
   initialInsert(): void {
     const json = JSON.parse(readFileSync("data/json/zaif.json", "utf8"));
+    this.db.set("zaif", json).write();
   }
 }
