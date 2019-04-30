@@ -1,5 +1,5 @@
-import { ExchangeSchema } from "./Config";
+import { BitcoinPrices } from "../Types/Types";
 
 export default interface ExchangeModelInterface {
-  getAll(): Array<ExchangeSchema>;
+  getAll(): BitcoinPrices;
 }

@@ -1,9 +1,9 @@
-import db, { ExchangeSchema } from "./Config";
+import db from "./Config";
 import ExchangeModelInterface from "./ExchangeModelInterface";
+import { BitcoinPrices } from "../Types/Types";
 
 // export default class ZaifModel implements ExchangeModelInterface{
-export default class ZaifModel {
-  static set(): void {
-    db.defaults({ id: 0, buyPrice: 1, datetime: "string" }).write();
-  }
-}
+// static getAll(): BitcoinPrices {
+//   return db.defaults({ id: 0, buyPrice: 1, datetime: "string" }).write()
+// }
+// }

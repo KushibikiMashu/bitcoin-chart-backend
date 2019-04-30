@@ -1,11 +1,6 @@
 import * as low from "lowdb";
 import * as FileSync from "lowdb/adapters/FileSync";
-
-export interface ExchangeSchema {
-  id: number;
-  buyPrice: number;
-  datetime: string;
-}
+import { ExchangeSchema } from "../Types/Types";
 
 const adapter = new FileSync<ExchangeSchema>("database/db.json");
 const db = low(adapter);

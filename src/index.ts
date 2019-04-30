@@ -1,5 +1,5 @@
 import * as express from "express";
-import exchange from "./Controllers/exchange";
+import exchange from "./Controllers/Exchange";
 
 const app = express();
 const port = 3005;
