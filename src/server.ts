@@ -5,6 +5,7 @@ import exchange from "./Controllers/Api/ExchangeController";
 import migration from "./Controllers/Api/MigrationConrtoller";
 
 const app = express();
+const port = process.env.PORT || 8080;
 
 app.use(cors());
 app.use(helmet());
@@ -16,4 +17,4 @@ app.get("/", (req: express.Request, res: express.Response) =>
   res.sendStatus(404)
 );
 
-app.listen(3005);
+app.listen(port);
