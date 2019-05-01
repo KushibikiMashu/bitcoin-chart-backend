@@ -1,10 +1,11 @@
 import * as express from "express";
+import * as helmet from "helmet";
 import exchange from "./Controllers/Api/ExchangeController";
 import migration from "./Controllers/Api/MigrationConrtoller";
 
 const app = express();
-const port = 3005;
 
+app.use(helmet());
 app.use(
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     res.header("Access-Control-Allow-Origin", "*");
@@ -23,4 +24,4 @@ app.get("/", (req: express.Request, res: express.Response) =>
   res.sendStatus(404)
 );
 
-app.listen(port, () => console.log(`Listening on port ${port}!`));
+app.listen(3005);
