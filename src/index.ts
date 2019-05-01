@@ -1,21 +1,13 @@
 import * as express from "express";
 import * as helmet from "helmet";
+import * as cors from "cors";
 import exchange from "./Controllers/Api/ExchangeController";
 import migration from "./Controllers/Api/MigrationConrtoller";
 
 const app = express();
 
+app.use(cors());
 app.use(helmet());
-app.use(
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header(
-      "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Accept"
-    );
-    next();
-  }
-);
 
 app.use("/api/exchange", exchange);
 app.use("/api/migration", migration);
