@@ -8,7 +8,8 @@ extern crate serde_derive;
 use std::{
     error::Error,
     process,
-    collections::HashMap,
+    fs::File,
+    io::BufReader,
 };
 use csv::ReaderBuilder;
 use chrono::NaiveDateTime;
@@ -21,7 +22,7 @@ struct Record {
     created_at: String,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize)]
 struct BitcoinRecord {
     id: i32,
     price: i32,
@@ -42,12 +43,14 @@ impl BitcoinRecord {
 
 fn str_to_timestamp(datetime: &String) -> i64 {
     let dt = NaiveDateTime::parse_from_str(datetime, "%Y-%m-%d %H:%M:%S").unwrap();
-    let mut timestamp: i64 = dt.timestamp();
+    let timestamp: i64 = dt.timestamp();
     (timestamp - 9 * 60 * 60)
 }
 
 
 fn read(filenames: [&str; 3]) -> Result<(), Box<Error>> {
+//    let mut json : Vec<str> = vec![];
+
     for filename in &filenames {
         let mut rdr = ReaderBuilder::new()
             .has_headers(false)
@@ -56,11 +59,20 @@ fn read(filenames: [&str; 3]) -> Result<(), Box<Error>> {
         for result in rdr.deserialize() {
             let record: Record = result?;
             let b_record: BitcoinRecord = BitcoinRecord::new(record);
-            println!("{:?}", b_record);
+            let b_json: String = serde_json::to_string(&b_record)?;
+            println!("{}", b_json);
         }
     }
     Ok(())
 }
+
+//fn write(filename: &str, json: &str)-> Result<(), Box<Error>>{
+//    let mut file = File::create(filename);
+//    let buf = BufReader::new(json);
+//    write!(file, "{}", buf)?;
+//    file.flush()?;
+//    OK(())
+//}
 
 fn main() {
     let filenames = ["../data/csv/zaif.csv", "../data/csv/bitflyer.csv", "../data/csv/coincheck.csv"];
