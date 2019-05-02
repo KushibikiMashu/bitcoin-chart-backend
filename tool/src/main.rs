@@ -50,13 +50,14 @@ fn str_to_timestamp(datetime: &String) -> i64 {
     (timestamp - 9 * 60 * 60)
 }
 
-fn read(filename: &str) -> Result<(), Box<Error>> {
+fn read(from: &str, to: &str) -> Result<(), Box<Error>> {
+    println!("b");
     let mut rdr = ReaderBuilder::new()
         .has_headers(false)
-        .from_path(filename)?;
+        .from_path(from)?;
 
     let mut json: Vec<String> = vec![];
-    let mut f = File::create("tst.json")?;
+    let mut f = File::create(to)?;
 
     // bufferに格納したいが、serde_jsonのto_writerの引数の型がbufferではないため、
     // IOにそのままfileを利用している
@@ -76,10 +77,21 @@ fn read(filename: &str) -> Result<(), Box<Error>> {
 }
 
 fn main() {
-    let filenames = ["../data/csv/zaif.csv", "../data/csv/bitflyer.csv", "../data/csv/coincheck.csv"];
+    let filenames = ["zaif", "bitflyer", "coincheck"];
+    println!("a");
 
-    read("../data/csv/zaif.csv");
     for filename in &filenames {
+        let mut from = String::from("../data/csv/");
+        let mut to = String::from("../data/new/");
+        from.push_str(filename);
+        to.push_str(filename);
+        from.push_str(".csv");
+        to.push_str(".json");
+        println!("{}", from);
+        println!("{}", to);
+
+        read(&from, &to);
+
 //        if let Err(err) = read(filename) {
 //            println!("error running example: {}", err);
 //            process::exit(1);
