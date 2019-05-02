@@ -56,22 +56,19 @@ fn read(from: &str, to: &str) -> Result<(), Box<Error>> {
         .has_headers(false)
         .from_path(from)?;
 
-    let mut json: Vec<String> = vec![];
     let mut f = File::create(to)?;
+    let mut buffer = BufWriter::new(f);
 
-    // bufferに格納したいが、serde_jsonのto_writerの引数の型がbufferではないため、
-    // IOにそのままfileを利用している
-    //  let mut buffer = BufWriter::new(f);
-
-    f.write(b"[");
+    buffer.write(b"[");
     for result in rdr.deserialize() {
         let record: Record = result?;
         let b_record: BitcoinRecord = BitcoinRecord::new(record);
-        serde_json::to_writer(&f, &b_record)?;
+        let json = serde_json::to_string(&b_record)?;
+        buffer.write(&json.into_bytes());
         println!("{}", &b_record.id);
-        &f.write(b",");
+        &buffer.write(b",");
     }
-    f.write(b"]");
+    buffer.write(b"]");
 
     Ok(())
 }
