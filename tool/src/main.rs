@@ -4,7 +4,6 @@ extern crate chrono;
 use std::{
     error::Error,
     process,
-    fs::File,
 };
 
 use csv::ReaderBuilder;
@@ -14,37 +13,35 @@ use chrono::{
 };
 
 struct BitcoinRecord {
-    id: str,
-    price: str,
+    id: i32,
+    price: i32,
     timestamp: i64,
     created_at: str,
 }
 
-impl BitcoinRecord {
-    pub fn new(record: csv::StringRecord) -> BitcoinRecord {
-        BitcoinRecord {
-            id: record[0],
-            price: record[1],
-            timestamp: str_to_timestamp(&record[2]),
-            created_at: record[2],
-        }
-    }
-}
-
-fn str_to_timestamp(datetime: &str) -> i64 {
-    let dt = NaiveDateTime::parse_from_str(datetime, "%Y-%m-%d %H:%M:%S").unwrap();
-    let mut timestamp: i64 = dt.timestamp();
-    (timestamp - 9 * 60 * 60)
-}
+//impl BitcoinRecord {
+//    pub fn new(record: csv::StringRecord) -> BitcoinRecord {
+//        BitcoinRecord {
+//            id: record[0],
+//            price: record[1],
+//            timestamp: str_to_timestamp(&record[2]),
+//            created_at: record[2],
+//        }
+//    }
+//}
+//
+//fn str_to_timestamp(datetime: &str) -> i64 {
+//    let dt = NaiveDateTime::parse_from_str(datetime, "%Y-%m-%d %H:%M:%S").unwrap();
+//    let mut timestamp: i64 = dt.timestamp();
+//    (timestamp - 9 * 60 * 60)
+//}
 
 
 fn read(filenames: [&str; 3]) -> Result<(), Box<Error>> {
     for filename in &filenames {
-        let f = File::open(filename)?;
-
         let mut rdr = ReaderBuilder::new()
             .has_headers(false)
-            .from_reader(f);
+            .from_path(filename)?;
 
         for result in rdr.records() {
             let record = result?;
