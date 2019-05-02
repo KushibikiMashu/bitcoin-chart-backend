@@ -9,7 +9,10 @@ use std::{
     error::Error,
     process,
     fs::File,
-    io::BufReader,
+    io::{
+        BufWriter,
+        prelude::*,
+    },
 };
 use csv::ReaderBuilder;
 use chrono::NaiveDateTime;
@@ -47,39 +50,40 @@ fn str_to_timestamp(datetime: &String) -> i64 {
     (timestamp - 9 * 60 * 60)
 }
 
+fn read(filename: &str) -> Result<(), Box<Error>> {
+    let mut rdr = ReaderBuilder::new()
+        .has_headers(false)
+        .from_path(filename)?;
 
-fn read(filenames: [&str; 3]) -> Result<(), Box<Error>> {
-//    let mut json : Vec<str> = vec![];
+    let mut json: Vec<String> = vec![];
+    let mut f = File::create("tst.json")?;
 
-    for filename in &filenames {
-        let mut rdr = ReaderBuilder::new()
-            .has_headers(false)
-            .from_path(filename)?;
+    // bufferに格納したいが、serde_jsonのto_writerの引数の型がbufferではないため、
+    // IOにそのままfileを利用している
+    //  let mut buffer = BufWriter::new(f);
 
-        for result in rdr.deserialize() {
-            let record: Record = result?;
-            let b_record: BitcoinRecord = BitcoinRecord::new(record);
-            let b_json: String = serde_json::to_string(&b_record)?;
-            println!("{}", b_json);
-        }
+    f.write(b"[");
+    for result in rdr.deserialize() {
+        let record: Record = result?;
+        let b_record: BitcoinRecord = BitcoinRecord::new(record);
+        serde_json::to_writer(&f, &b_record)?;
+        println!("{}", &b_record.id);
+        &f.write(b",");
     }
+    f.write(b"]");
+
     Ok(())
 }
-
-//fn write(filename: &str, json: &str)-> Result<(), Box<Error>>{
-//    let mut file = File::create(filename);
-//    let buf = BufReader::new(json);
-//    write!(file, "{}", buf)?;
-//    file.flush()?;
-//    OK(())
-//}
 
 fn main() {
     let filenames = ["../data/csv/zaif.csv", "../data/csv/bitflyer.csv", "../data/csv/coincheck.csv"];
 
-    if let Err(err) = read(filenames) {
-        println!("error running example: {}", err);
-        process::exit(1);
+    read("../data/csv/zaif.csv");
+    for filename in &filenames {
+//        if let Err(err) = read(filename) {
+//            println!("error running example: {}", err);
+//            process::exit(1);
+//        }
     }
 }
 
@@ -95,8 +99,3 @@ mod test {
         assert_eq!(timestamp, 1556567608);
     }
 }
-
-// 各jsonのデータをid, timestamp, created_atにする
-
-// 1つのjsonに3つのデータを突っ込む
-// {zaif: [], bitflyer:[], coincheck:[]}
