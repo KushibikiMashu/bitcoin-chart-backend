@@ -16,7 +16,6 @@ use std::{
 };
 use csv::ReaderBuilder;
 use chrono::NaiveDateTime;
-use serde::{Serialize, Deserialize};
 
 #[derive(Debug, Deserialize)]
 struct Record {
@@ -44,7 +43,7 @@ impl BitcoinRecord {
     }
 }
 
-fn str_to_timestamp(datetime: &String) -> i64 {
+fn str_to_timestamp(datetime: &str) -> i64 {
     let dt = NaiveDateTime::parse_from_str(datetime, "%Y-%m-%d %H:%M:%S").unwrap();
     let timestamp: i64 = dt.timestamp();
     (timestamp - 9 * 60 * 60)
@@ -54,29 +53,37 @@ fn format_filename_csv(filename: &str) -> String {
     format!("{}{}{}", "../data/csv/", filename, ".csv")
 }
 
-pub fn format_filename_json(filename: &str) -> String {
+fn format_filename_json(filename: &str) -> String {
     format!("{}{}{}", "../data/new/", filename, ".json")
 }
 
-fn read(from: &str, to: &str) -> Result<(), Box<Error>> {
-    println!("b");
+fn read(input: &str) -> Result<String, Box<Error>> {
     let mut rdr = ReaderBuilder::new()
         .has_headers(false)
-        .from_path(from)?;
+        .from_path(&input)?;
 
-    let mut f = File::create(to)?;
-    let mut buffer = BufWriter::new(f);
-
-    buffer.write(b"[");
+    // 下記のコードはrustっぽくない気がする
+    // vecに格納してstringとして結合するのもあり
+    let mut json = String::from("[");
     for result in rdr.deserialize() {
         let record: Record = result?;
-        let b_record: BitcoinRecord = BitcoinRecord::new(record);
-        let json = serde_json::to_string(&b_record)?;
-        buffer.write(&json.into_bytes());
+        let b_record = BitcoinRecord::new(record);
         println!("{}", &b_record.id);
-        &buffer.write(b",");
+
+        let mut obj = serde_json::to_string(&b_record)?;
+        obj.push_str(",");
+        json.push_str(&obj);
     }
-    buffer.write(b"]");
+    json.pop();
+    json.push_str("]");
+
+    Ok(json)
+}
+
+fn write(output: String, content: String) -> Result<(), Box<Error>> {
+    let f = File::create(output)?;
+    let mut buffer = BufWriter::new(f);
+    buffer.write(&content.into_bytes())?;
 
     Ok(())
 }
@@ -85,21 +92,21 @@ fn main() {
     let filenames = ["zaif", "bitflyer", "coincheck"];
 
     for filename in &filenames {
-        let mut from = String::from("../data/csv/");
-        let mut to = String::from("../data/new/");
-        from.push_str(filename);
-        to.push_str(filename);
-        from.push_str(".csv");
-        to.push_str(".json");
-        println!("{}", from);
-        println!("{}", to);
+        let input: String = format_filename_csv(filename);
+        let output: String = format_filename_json(filename);
 
-        read(&from, &to);
-
-//        if let Err(err) = read(filename) {
-//            println!("error running example: {}", err);
-//            process::exit(1);
-//        }
+        match read(&input) {
+            Ok(content) => {
+                if let Err(e) = write(output, content) {
+                    println!("error. cannot write : {}", e);
+                    process::exit(1);
+                }
+            },
+            Err(e) => {
+                println!("error. cannot read : {}", e);
+                process::exit(1);
+            }
+        };
     }
 }
 
