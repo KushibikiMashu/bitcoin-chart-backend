@@ -50,6 +50,14 @@ fn str_to_timestamp(datetime: &String) -> i64 {
     (timestamp - 9 * 60 * 60)
 }
 
+fn format_filename_csv(filename: &str) -> String {
+    format!("{}{}{}", "../data/csv/", filename, ".csv")
+}
+
+pub fn format_filename_json(filename: &str) -> String {
+    format!("{}{}{}", "../data/new/", filename, ".json")
+}
+
 fn read(from: &str, to: &str) -> Result<(), Box<Error>> {
     println!("b");
     let mut rdr = ReaderBuilder::new()
@@ -75,7 +83,6 @@ fn read(from: &str, to: &str) -> Result<(), Box<Error>> {
 
 fn main() {
     let filenames = ["zaif", "bitflyer", "coincheck"];
-    println!("a");
 
     for filename in &filenames {
         let mut from = String::from("../data/csv/");
@@ -98,13 +105,26 @@ fn main() {
 
 #[cfg(test)]
 mod test {
+    use chrono::NaiveDateTime;
     use super::*;
 
     #[test]
-    fn str_to_timestamp() {
+    fn test_str_to_timestamp() {
         let dt = NaiveDateTime::parse_from_str("2019-04-30 4:53:28", "%Y-%m-%d %H:%M:%S").unwrap();
         let mut timestamp: i64 = dt.timestamp();
         timestamp = timestamp - 9 * 60 * 60;
         assert_eq!(timestamp, 1556567608);
+    }
+
+    #[test]
+    fn test_format_filename_csv() {
+        let filename = format_filename_csv("zaif");
+        assert_eq!(&filename, "../data/csv/zaif.csv");
+    }
+
+    #[test]
+    fn test_format_filename_json() {
+        let filename = format_filename_json("zaif");
+        assert_eq!(&filename, "../data/new/zaif.json");
     }
 }
