@@ -1,6 +1,6 @@
 Depreciated
 
-API server with Express.
+API server with Express and TypeScript.
 
 # bitcoin-chart-backend
 
